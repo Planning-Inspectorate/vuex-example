@@ -1,9 +1,22 @@
 import { fetchAllTasks, fetchMyTasks, fetchTask, toggleDone } from "../../api"
 import Vue from 'vue';
 
+/**
+ * @typedef {Object} Task
+ * @property {number} id
+ * @property {number} userId
+ * @property {string} task
+ * @property {Date} created
+ * @property {boolean} done
+ */
+
 export default {
     namespaced: true,
     state: {
+        /**
+         * Map of task ID to task
+         * @type {Object<number, Task>}
+         */
         tasksById: {}
     },
     mutations: {
@@ -24,9 +37,17 @@ export default {
         }
     },
     getters: {
+        /**
+         * List of all tasks
+         * @type {Task[]}
+         */
         tasks(state) {
             return Object.values(state.tasksById);
         },
+        /**
+         * Map of user ID to task list
+         * @type {Object<number, Task[]>}
+         */
         tasksByUser(state) {
             const byUser = {};
             for (const task of Object.values(state.tasksById)) {
