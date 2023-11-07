@@ -4,6 +4,7 @@ const allTasks = new Map();
 const userTasks = new Map();
 
 export async function toggleDone(task) {
+    console.log(`[api] toggleDone(${task.id})`);
     const t = {
         ...task,
         done: !task.done
@@ -14,6 +15,7 @@ export async function toggleDone(task) {
 }
 
 export async function fetchAllTasks() {
+    console.log('[api] fetchAllTasks');
     if (allTasks.size > 0 && userTasks.size > 1) {
         return Array.from(allTasks.values());
     }
@@ -25,6 +27,7 @@ export async function fetchAllTasks() {
 }
 
 export async function fetchMyTasks(userId) {
+    console.log(`[api] fetchMyTasks(${userId})`);
     if (userTasks.has(userId)) {
         const ids = userTasks.get(userId);
         return ids.map(id => allTasks.get(id));
@@ -38,6 +41,7 @@ export async function fetchMyTasks(userId) {
 }
 
 export async function fetchTask(id) {
+    console.log(`[api] fetchTask(${id})`);
     if (allTasks.has(id)) {
         return allTasks.get(id);
     }

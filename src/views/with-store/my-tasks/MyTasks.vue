@@ -13,28 +13,36 @@
 </template>
 
 <script>
-import {fetchAllTasks, toggleDone} from '../../../api';
+import {mapGetters, mapActions} from 'vuex';
 import TaskView from '../TaskView.vue';
 
 export default {
-    name: 'TaskList',
-    components: {TaskView},
+    name: 'MyTasks',
+    components: { TaskView },
+    props: {
+        userId: {
+            default: 5
+        }
+    },
     data() {
         return {
-            tasks: [],
             showDialog: false,
             selectedId: null
         };
     },
+    computed: {
+      ...mapGetters('tasks', ['tasksByUser']),
+      tasks() {
+        return this.tasksByUser[this.userId];
+      }
+    },
     async created() {
-        console.log('fetch tasks');
-        this.tasks = await fetchAllTasks();
+        await this.fetchForUser(this.userId);
     },
     methods: {
+        ...mapActions('tasks', ['toggleDone', 'fetchForUser']),
         async toggle(task) {
-            const updated = await toggleDone(task);
-            // save the updated task
-            this.tasks = this.tasks.map(task => task.id === updated.id ? updated : task);
+            await this.toggleDone(task.id);
         },
         async view(task) {
             this.selectedId = task.id;

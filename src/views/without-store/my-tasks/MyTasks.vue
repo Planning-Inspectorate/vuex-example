@@ -4,9 +4,8 @@
         <template v-for="t in tasks">
             <v-list-item :key="t.id">
                 <v-list-item-title @click="view(t)">{{ t.task }}</v-list-item-title>
-                <v-list-item-action @click="toggle(t)">
-                    <v-icon v-if="!t.done" color="grey lighten-1">mdi-star-outline</v-icon>
-                    <v-icon v-else color="yellow darken-3">mdi-star</v-icon>
+                <v-list-item-action>
+                    <favorite-icon @click="toggle(t)" :value="t.done"/>
                 </v-list-item-action>
             </v-list-item>
         </template>

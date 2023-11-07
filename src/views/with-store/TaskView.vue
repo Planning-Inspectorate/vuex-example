@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import {fetchTask, toggleDone} from '../../api';
+import {mapState, mapActions} from 'vuex';
 
 export default {
     name: 'TaskView',
@@ -35,9 +35,14 @@ export default {
     },
     data() {
         return {
-            dialog: false,
-            task: {}
+            dialog: false
         };
+    },
+    computed: {
+        ...mapState('tasks', ['tasksById']),
+        task() {
+            return this.tasksById[this.id] || {};
+        }
     },
     watch: {
         value(s) {
@@ -45,20 +50,12 @@ export default {
         },
         dialog(s) {
             this.$emit('input', s);
-        },
-        async id(id) {
-            if (id !== null) {
-                this.task = await fetchTask(id);
-            } else {
-                this.task = {};
-            }
         }
     },
     methods: {
+        ...mapActions('tasks', ['toggleDone']),
         async toggle() {
-            const updated = await toggleDone(this.task);
-            // save the updated task
-            this.task = updated;
+            await this.toggleDone(this.task.id);
         }
     }
 };

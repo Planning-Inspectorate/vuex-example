@@ -13,28 +13,29 @@
 </template>
 
 <script>
-import {fetchAllTasks, toggleDone} from '../../../api';
 import TaskView from '../TaskView.vue';
+import {mapGetters, mapActions} from 'vuex';
 
 export default {
     name: 'TaskList',
     components: {TaskView},
     data() {
         return {
-            tasks: [],
             showDialog: false,
             selectedId: null
         };
     },
+    computed: {
+      ...mapGetters('tasks', ['tasks'])  
+    },
     async created() {
         console.log('fetch tasks');
-        this.tasks = await fetchAllTasks();
+        await this.fetchAll();
     },
     methods: {
+        ...mapActions('tasks', ['toggleDone', 'fetchAll']),
         async toggle(task) {
-            const updated = await toggleDone(task);
-            // save the updated task
-            this.tasks = this.tasks.map(task => task.id === updated.id ? updated : task);
+            await this.toggleDone(task.id);
         },
         async view(task) {
             this.selectedId = task.id;

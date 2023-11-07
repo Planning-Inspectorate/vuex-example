@@ -18,15 +18,18 @@
             <v-divider></v-divider>
 
             <v-list dense nav>
-                <v-list-item v-for="item in items" :key="item.title" link :to="{name: item.link}">
-                    <v-list-item-icon>
-                        <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-item-icon>
+                <template v-for="(item, index) in items">
+                    <v-list-item v-if="item.link" link :to="{name: item.link}" :key="index">
+                        <v-list-item-icon>
+                            <v-icon>{{ item.icon }}</v-icon>
+                        </v-list-item-icon>
 
-                    <v-list-item-content>
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
+                        <v-list-item-content>
+                            <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-subheader v-else :key="index + 'header'">{{ item.title }}</v-subheader>
+                </template>
             </v-list>
         </v-navigation-drawer>
         <v-container>
@@ -43,8 +46,12 @@ export default {
     data() {
         return {
             items: [
+                {title: 'Without Store'},
                 {title: 'All Tasks', link: 'without-store:task-list'},
-                {title: 'My Tasks', link: 'without-store:my-tasks'}
+                {title: 'My Tasks', link: 'without-store:my-tasks'},
+                {title: 'With Store'},
+                {title: 'All Tasks', link: 'with-store:task-list'},
+                {title: 'My Tasks', link: 'with-store:my-tasks'}
             ]
         }
     }
